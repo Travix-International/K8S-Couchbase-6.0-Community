@@ -98,12 +98,6 @@ recover_node_to_cluster(){
     --server-failover="${fqdn}:${PORT}" \
     --user="${CB_REST_USERNAME}" \
     --password="${CB_REST_PASSWORD}" || true
-		
-    echo "Re-add the node to the cluster..."
-    couchbase-cli server-readd --cluster="${APP_NAME}-discovery:${PORT}" \
-    --server-add="${fqdn}:${PORT}" \
-    --user="${CB_REST_USERNAME}" \
-    --password="${CB_REST_PASSWORD}" || true
     
     echo "Recovering the node..."
     couchbase-cli recovery --cluster="${APP_NAME}-discovery:${PORT}" \
@@ -153,7 +147,7 @@ if [ "${runningCluster}" == "false" ]; then
     echo "No running cluster found..."
     initCluster="false"
     couchbase-cli server-list \
-      --cluster="localhost:${PORT}" \
+      --cluster="${APP_NAME}-discovery:${PORT}" \
       --user="${CB_REST_USERNAME}" \
       --password="${CB_REST_PASSWORD}" || initCluster="true"
 
@@ -164,17 +158,14 @@ if [ "${runningCluster}" == "false" ]; then
     fi
 else
   echo "Found a running cluster..."
+  cat cluster.txt
   #check if the cluster busy with a rebalance
-  notRunning=$(couchbase-cli rebalance-status --cluster="${APP_NAME}-discovery:${PORT}" -u ${USER} -p ${PASSWORD} | grep notRunning | wc -l)
-  # the expected resutls from (couchbase-cli rebalance-status) is:
-  #(u'notRunning', u'Exception Msg')
-  #(u'Running', None)
-  #(u'notRunning', None)
-  until [[ $notRunning -eq 1 ]]; do
+  RebalanceStatus=$(couchbase-cli rebalance-status --cluster="${APP_NAME}-discovery:${PORT}" -u ${USER} -p ${PASSWORD} | grep status | tr -s ' ' | cut -d: -f2 | cut -d'"' -f2)
+  until [[ $RebalanceStatus != "running" ]]; do
     echo "the cluster busy with a rebalance..."
     sleep 1
 
-    notRunning=$(couchbase-cli rebalance-status --cluster="${APP_NAME}-discovery:${PORT}" -u ${USER} -p ${PASSWORD} | grep notRunning | wc -l)
+    RebalanceStatus=$(couchbase-cli rebalance-status --cluster="${APP_NAME}-discovery:${PORT}" -u ${USER} -p ${PASSWORD} | grep status | tr -s ' ' | cut -d: -f2 | cut -d'"' -f2)
   done
 
   # Is this node been part of the cluster?
@@ -187,7 +178,7 @@ else
     add_node_to_cluster
     rebalance_node_to_cluster
   else
-    echo "failover, readd, recovery, and rebalance the cluster..."
+    echo "failover, recovery, and rebalance the cluster..."
     recover_node_to_cluster 
   fi
 fi
@@ -195,7 +186,7 @@ fi
 rm -f /doNotBeHealthy.txt
 echo "Couchbase cluster:"
 couchbase-cli server-list \
-  --cluster="localhost:${PORT}" \
+  --cluster="${APP_NAME}-discovery:${PORT}" \
   --user="${CB_REST_USERNAME}" \
   --password="${CB_REST_PASSWORD}"
 
