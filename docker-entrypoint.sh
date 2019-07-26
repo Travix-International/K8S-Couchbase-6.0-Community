@@ -66,7 +66,7 @@ set_node_hostname(){
       echo "Setting node hostname..."
 
       couchbase-cli node-init \
-        --cluster="$fqdn:${PORT}" \
+        --cluster="${fqdn}:${PORT}" \
         --node-init-hostname=$fqdn
     fi
 }
@@ -134,9 +134,9 @@ done;
 
 echo "Is there a running cluster?..."
 runningCluster="true"
-if curl -s -o /dev/null --max-time 2 "http://${APP_NAME}-discovery:${PORT}"; then
+if curl -s -o /dev/null --max-time 2 "http://${fqdn}:${PORT}"; then
   couchbase-cli server-list \
-  --cluster="${APP_NAME}-discovery:${PORT}" \
+  --cluster="${fqdn}:${PORT}" \
   --user="${CB_REST_USERNAME}" \
   --password="${CB_REST_PASSWORD}" > cluster.txt || runningCluster="false"
 else
@@ -147,7 +147,7 @@ if [ "${runningCluster}" == "false" ]; then
     echo "No running cluster found..."
     initCluster="false"
     couchbase-cli server-list \
-      --cluster="${APP_NAME}-discovery:${PORT}" \
+      --cluster="${fqdn}:${PORT}" \
       --user="${CB_REST_USERNAME}" \
       --password="${CB_REST_PASSWORD}" || initCluster="true"
 
@@ -186,7 +186,7 @@ fi
 rm -f /doNotBeHealthy.txt
 echo "Couchbase cluster:"
 couchbase-cli server-list \
-  --cluster="${APP_NAME}-discovery:${PORT}" \
+  --cluster="${fqdn}:${PORT}" \
   --user="${CB_REST_USERNAME}" \
   --password="${CB_REST_PASSWORD}"
 
