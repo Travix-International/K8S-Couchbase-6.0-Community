@@ -9,7 +9,8 @@ Run Couchbase 6.0 Community on Kubernetes
 
     docker run --rm -it --env-file ./env.list \
     -v (pwd):/wd bhgedigital/envsubst \
-    sh -c "envsubst < /wd/kubernetes.tmpl.yaml > kubernetes-subst.yaml && cat kubernetes-subst.yaml" | kubectl apply --dry-run  -f -
+    sh -c "envsubst < /wd/kubernetes.tmpl.yaml > kubernetes-subst.yaml && cat kubernetes-subst.yaml" | \
+    kubectl apply --dry-run  -f -
 # Login to the UI
 
     http://<couchbase-v6-discovery-IP>:8091/ui/index.html
