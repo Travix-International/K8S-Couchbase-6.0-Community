@@ -12,6 +12,7 @@ metadata:
     app: ${APP_NAME}
 spec:
   type: LoadBalancer
+  sessionAffinity: ClientIP
   ports:
   - name: http
     port: 8091
