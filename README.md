@@ -7,6 +7,6 @@ Run Couchbase 6.0 Community on Kubernetes
 
     cd K8S-Couchbase-6.0-Community
 
-    docker container run --rm -it --env-file ./env.list \
+    docker run --rm -it --env-file ./env.list \
     -v (pwd):/wd bhgedigital/envsubst \
     sh -c "envsubst < /wd/kubernetes.tmpl.yaml > kubernetes-subst.yaml && cat kubernetes-subst.yaml"
