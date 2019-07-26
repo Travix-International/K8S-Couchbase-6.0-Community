@@ -134,9 +134,9 @@ done;
 
 echo "Is there a running cluster?..."
 runningCluster="true"
-if curl -s -o /dev/null --max-time 2 "http://${fqdn}:${PORT}"; then
+if curl -s -o /dev/null --max-time 5 "http://${APP_NAME}-discovery:${PORT}"; then
   couchbase-cli server-list \
-  --cluster="${fqdn}:${PORT}" \
+  --cluster="${APP_NAME}-discovery:${PORT}" \
   --user="${CB_REST_USERNAME}" \
   --password="${CB_REST_PASSWORD}" > cluster.txt || runningCluster="false"
 else
