@@ -108,7 +108,7 @@ spec:
           privileged: true
       containers:
       - name: ${APP_NAME}
-        image: travix/travix/k8s-couchbase-6.0-community:latest
+        image: travix/k8s-couchbase-6.0-community:latest
         imagePullPolicy: Always
         resources:
           limits:

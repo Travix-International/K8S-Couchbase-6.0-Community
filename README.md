@@ -9,4 +9,12 @@ Run Couchbase 6.0 Community on Kubernetes
 
     docker run --rm -it --env-file ./env.list \
     -v (pwd):/wd bhgedigital/envsubst \
-    sh -c "envsubst < /wd/kubernetes.tmpl.yaml > kubernetes-subst.yaml && cat kubernetes-subst.yaml"
+    sh -c "envsubst < /wd/kubernetes.tmpl.yaml > kubernetes-subst.yaml && cat kubernetes-subst.yaml" | kubectl apply --dry-run  -f -
+# Login to the UI
+
+    http://<couchbase-v6-discovery-IP>:8091/ui/index.html
+    Username: Administrator
+    Password: wPT9VmGgacq8KAwxWGnDQ83m
+
+## Best Practice
+[Top 10 Things SysAdmin Must Know About Couchbase](https://blog.couchbase.com/top-10-things-ops-sys-admin-must-know-about-couchbase/)
