@@ -192,11 +192,11 @@ spec:
         - name: ${APP_NAME}-data
           mountPath: /opt/couchbase/var
       - name: ${APP_NAME}-exporter
-        image: travix/couchbase-exporter:GKE
+        image: travix/prometheus_couchbase_exporter:latest
         imagePullPolicy: Always
         env:
-        - name: "COUCHBASE_HOST"
-          value: "127.0.0.1"
+        - name: "COUCHBASE_URL"
+          value: "http://127.0.0.1"
         - name: "COUCHBASE_PORT"
           value: "8091"
         - name: "COUCHBASE_USERNAME"
@@ -207,11 +207,11 @@ spec:
               name: ${APP_NAME}-secrets
               key: couchbase-password
         readinessProbe:
-          httpGet:
-            path: /metrics
+          tcpSocket:
             port: 9119
           initialDelaySeconds: 10
           timeoutSeconds: 15
+          failureThreshold: 10
         resources:
           requests:
             cpu: 200m
