@@ -19,8 +19,7 @@ Run Couchbase 6.0 Community on Kubernetes
 Wait till you see "Running Couchbase server ..."
 
 Then go to your browser and visit: http://127.0.0.1:8091/
-    username: Administrator
-    password: abc@123
+ Username: Administrator, Password: abc@123
 # Deploy it manually to your K8S cluster
  
     git clone git@github.com:Travix-International/K8S-Couchbase-6.0-Community.git
