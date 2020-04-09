@@ -1,6 +1,20 @@
 # K8S-Couchbase-6.0-Community
 Run Couchbase 6.0 Community on Kubernetes
 
+# Deploy it manually to your local machine
+
+    docker run -p 8091:8091  \
+    -e "USER=Administrator" \
+    -e "PASSWORD=abc@123" \
+    -e "AUTOFAILOVER_TIMEOUT=60" \
+    -e "DISCOVERY_SERVICE=couchbase-0.local" \
+    -e "FTS_RAM_SIZE_MB=256" \
+    -e "INDEX_RAM_SIZE_MB=256" \
+    -e "APP_NAME=couchbase" \
+    -e "RAM_SIZE_MB=1024" \
+    -e "REBALANCE_ON_NODE_ADDITION=1" \
+    -e "SERVICES=data,index,query,fts" \
+    travix/k8s-couchbase-6.0-community
 # Deploy it manually to your K8S cluster
  
     git clone git@github.com:Travix-International/K8S-Couchbase-6.0-Community.git
